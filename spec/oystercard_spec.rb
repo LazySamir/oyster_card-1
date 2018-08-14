@@ -40,8 +40,16 @@ describe Oystercard do
   end
 
   describe "#touch_in" do
-    it "returns true when called" do
-      expect(subject.touch_in).to eq true
+# useless test?
+    # it "returns true when called" do
+    #   expect(subject.touch_in).to eq true
+    # end
+
+    context "while balance = 0" do
+      let(:sub2)        { Oystercard.new(0) }
+      it "raises error if not enough funds" do
+        expect { sub2.touch_in }.to raise_error "balance below minimum: #{Oystercard::MINUMUM_FARE}"
+      end
     end
   end
 
@@ -50,9 +58,9 @@ describe Oystercard do
   # evergreen - set in_journey to true first
       expect(subject.touch_out).to eq false
     end
-
-    it "will not deduct more than balance" do
-      expect { subject.deduct_money(Oystercard::DEFAULT_CAPACITY+1) }.to raise_error("Insufficient balance, #{subject.balance} remaining")
-    end
+    #
+    # it "will not deduct more than balance" do
+    #   expect { subject.deduct_money(Oystercard::DEFAULT_CAPACITY+1) }.to raise_error("Insufficient balance, #{subject.balance} remaining")
+    # end
   end
 end
