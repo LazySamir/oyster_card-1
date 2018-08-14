@@ -1,6 +1,7 @@
 require 'oystercard'
+
 describe Oystercard do
-  describe "when initialized" do
+  describe ".new" do
     it { is_expected.not_to eql(nil) }
 
     it "responds to :money" do
@@ -28,9 +29,28 @@ describe Oystercard do
   describe "#deduct_money" do
     it { is_expected.to respond_to(:deduct_money).with(1).argument }
     it "deducts amount from card balance" do
-      expect { subject.deduct_money(5) }.to change { subject.balance }.by -5 
+      expect { subject.deduct_money(5) }.to change { subject.balance }.by -5
     end
-  
+  end
+
+  describe "#in_journey?" do
+    it "returns false by default" do
+      expect(subject.in_journey?).to eq false
+    end
+  end
+
+  describe "#touch_in" do
+    it "returns true when called" do
+      expect(subject.touch_in).to eq true
+    end
+  end
+
+  describe "#touch_out" do
+    it "returns false when called" do
+  # evergreen - set in_journey to true first
+      expect(subject.touch_out).to eq false
+    end
+
     it "will not deduct more than balance" do
       expect { subject.deduct_money(Oystercard::DEFAULT_CAPACITY+1) }.to raise_error("Insufficient balance, #{subject.balance} remaining")
     end

@@ -6,11 +6,11 @@ attr_reader :balance, :limit
     @balance = balance
     @limit = 90
     # @starting = nil
-    @in_use = false
+    @in_journey = false
   end
 
   def in_journey?
-    @in_use
+    @in_journey
   end
 
   def add_money(amount)
@@ -23,4 +23,11 @@ attr_reader :balance, :limit
     @balance -= amount
   end
 
+  def touch_in
+    @in_journey = true
+  end
+  
+  def touch_out
+    @in_journey = false
+  end
 end
