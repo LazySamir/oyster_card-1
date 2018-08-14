@@ -27,9 +27,12 @@ describe Oystercard do
   end
 
   describe "#deduct_money" do
-    it { is_expected.to respond_to(:deduct_money).with(1).argument }
-    it "deducts amount from card balance" do
-      expect { subject.deduct_money(5) }.to change { subject.balance }.by -5
+    it "touch_out reduces balance by minimum fare via #deduct_money" do
+      subject.touch_out
+      expect(subject.balance).to eq (Oystercard::DEFAULT_CAPACITY - Oystercard::MINUMUM_FARE)
+      # should this be in deduct_money or touch_out?
+      # wants us to use this syntax
+      # expect { subject.balance }.to change{}.by()
     end
   end
 
@@ -40,10 +43,10 @@ describe Oystercard do
   end
 
   describe "#touch_in" do
-# useless test?
-    # it "returns true when called" do
-    #   expect(subject.touch_in).to eq true
-    # end
+    it "assigns in_journey to true" do
+      subject.touch_in
+      expect(subject.in_journey?).to eq true
+    end
 
     context "while balance = 0" do
       let(:sub2)        { Oystercard.new(0) }
@@ -54,13 +57,11 @@ describe Oystercard do
   end
 
   describe "#touch_out" do
-    it "returns false when called" do
-  # evergreen - set in_journey to true first
-      expect(subject.touch_out).to eq false
+    it "assigns in_journey to false" do
+      subject.touch_in
+      #is this too relient on touch_in working? set instance variable directly?
+      subject.touch_out
+      expect(subject.in_journey?).to eq false
     end
-    #
-    # it "will not deduct more than balance" do
-    #   expect { subject.deduct_money(Oystercard::DEFAULT_CAPACITY+1) }.to raise_error("Insufficient balance, #{subject.balance} remaining")
-    # end
   end
 end

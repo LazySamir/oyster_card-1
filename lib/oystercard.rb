@@ -6,7 +6,6 @@ attr_reader :balance, :limit
   def initialize (balance = DEFAULT_CAPACITY)
     @balance = balance
     @limit = 90
-    # @starting = nil
     @in_journey = false
   end
 
@@ -23,17 +22,22 @@ attr_reader :balance, :limit
     @balance += amount
   end
 
-  def deduct_money(amount)
-    raise "Insufficient balance, #{balance} remaining" if (balance - amount) < 0
-    @balance -= amount
-  end
 
   def touch_in
-    raise "balance below minimum: #{Oystercard::MINUMUM_FARE}"
+    raise "balance below minimum: #{Oystercard::MINUMUM_FARE}" if balance < Oystercard::MINUMUM_FARE
     @in_journey = true
   end
 
   def touch_out
     @in_journey = false
+    deduct_money(MINUMUM_FARE)
   end
+
+private
+
+  def deduct_money(amount)
+    raise "Insufficient balance, #{balance} remaining" if (balance - amount) < 0
+    @balance -= amount
+  end
+
 end
