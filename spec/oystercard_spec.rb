@@ -3,14 +3,21 @@ require 'oystercard'
 describe Oystercard do
 let(:mockStation)   { double :station }
 
-  describe ".new" do
+  describe "#new" do
 
-    it "has a balance of 10" do
-      expect(subject.balance).to eq(Oystercard::DEFAULT_BALANCE)
+    describe ".journey" do
+      it "returns an empty array" do
+        expect(subject.journey).to eq([])
+      end
     end
 
-    it "has a changeable default balance" do
-      expect(Oystercard.new(5).balance).to eq(5)
+    describe ".balance" do
+      it "has a balance of 10" do
+        expect(subject.balance).to eq(Oystercard::DEFAULT_BALANCE)
+      end
+      it "has a changeable default" do
+        expect(Oystercard.new(5).balance).to eq(5)
+      end
     end
   end
 
@@ -25,7 +32,7 @@ let(:mockStation)   { double :station }
 
   describe "#deduct_money" do
     it "touch_out reduces balance by minimum fare via #deduct_money" do
-      subject.touch_out
+      subject.touch_out(mockStation)
       expect(subject.balance).to eq (Oystercard::DEFAULT_BALANCE - Oystercard::MINUMUM_FARE)
       # should this be in deduct_money or touch_out?
       # wants us to use this syntax
@@ -64,14 +71,19 @@ let(:mockStation)   { double :station }
     it "assigns in_journey to false" do
       subject.touch_in(mockStation)
       #is this too relient on touch_in working? set instance variable directly?
-      subject.touch_out
+      subject.touch_out(mockStation)
       expect(subject.in_journey?).to eq false
+    end
+
+    it "takes 1 argument" do
+      expect(subject).to respond_to(:touch_out).with(1).argument
     end
     describe ".entry_station" do
       it "return nil" do
-        subject.touch_out
+        subject.touch_out(mockStation)
         expect(subject.entry_station).to eq nil
       end
     end
+
   end
 end
