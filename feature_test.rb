@@ -1,4 +1,4 @@
 require './lib/oystercard.rb'
-card = Oystercard.new(5)
-card.touch_in
-card.touch_out
+card = Oystercard.new
+card.touch_in("radio4")
+card.in_journey?
