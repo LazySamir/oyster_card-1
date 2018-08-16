@@ -41,7 +41,7 @@ let(:mockStation2)   { double :station }
   describe "#deduct_money" do
     it "touch_out reduces balance by minimum fare via #deduct_money" do
       subject.touch_out(mockStation)
-      expect(subject.balance).to eq (Oystercard::DEFAULT_BALANCE - Oystercard::MINUMUM_FARE)
+      expect(subject.balance).to eq (Oystercard::DEFAULT_BALANCE - Oystercard::MINIMUM_FARE)
       # should this be in deduct_money or touch_out?
       # wants us to use this syntax
       # expect { subject.balance }.to change{}.by()
@@ -70,7 +70,7 @@ let(:mockStation2)   { double :station }
     context "while balance = 0" do
       let(:sub2)        { Oystercard.new(0) }
       it "raises error if not enough funds" do
-        expect { sub2.touch_in(mockStation) }.to raise_error "balance below minimum: #{Oystercard::MINUMUM_FARE}"
+        expect { sub2.touch_in(mockStation) }.to raise_error "balance below minimum: #{Oystercard::MINIMUM_FARE}"
       end
     end
   end

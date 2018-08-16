@@ -1,5 +1,7 @@
+require_relative 'oystercard'
 class Journey
-
+PENALTY_FARE = 6
+# move minimum fare to here
 attr_reader :voyage
 
   def initialize(voyage)
@@ -16,5 +18,9 @@ attr_reader :voyage
 
   def complete?
     !(voyage[:start] == nil || voyage[:finish] == nil)
+  end
+
+  def fare
+    self.complete? ? Oystercard::MINIMUM_FARE : PENALTY_FARE
   end
 end

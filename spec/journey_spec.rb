@@ -41,4 +41,19 @@ describe Journey do
   end
 
   describe '#fare' do
+    context 'when journey is complete' do
+      it 'returns minimum fare' do
+        journey.start("station1")
+        journey.finish("station2")
+        expect(journey.fare).to eq(Oystercard::MINIMUM_FARE)
+      end
+    end
+
+    context 'when journey is not complete' do
+      it 'returns penalty fare' do
+        journey.finish("station2")
+        expect(journey.fare).to eq(Journey::PENALTY_FARE)
+      end
+    end
+  end
 end
