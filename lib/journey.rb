@@ -14,4 +14,7 @@ attr_reader :voyage
     @voyage.merge!(finish: station)
   end
 
+  def complete?
+    !(voyage[:start] == nil || voyage[:finish] == nil)
+  end
 end

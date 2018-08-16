@@ -17,4 +17,28 @@ describe Journey do
 
   # check start and finish together (through the complete method?)
 
+  describe '#complete?' do
+    # let(:voyage) { double :start("old st") :finish("aldgate") }
+    context 'when journey is complete' do
+      it 'returns true' do
+        journey.start("station1")
+        journey.finish("station2")
+        expect(journey.complete?).to be
+      end
+    end
+
+    context 'when journey is not complete' do
+      it 'returns false: start missing' do
+        journey.finish("station2")
+        expect(journey.complete?).to be_falsey
+      end
+
+      it 'returns false: finish missing' do
+        journey.start("station1")
+        expect(journey.complete?).to be_falsey
+      end
+    end
+  end
+
+  describe '#fare' do
 end

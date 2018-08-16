@@ -18,5 +18,5 @@ station.name
 journey = Journey.new("voyage")
 journey.start(station)
 journey.finish(station)
-journey.fare
 journey.complete?
+journey.fare
