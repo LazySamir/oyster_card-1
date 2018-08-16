@@ -2,14 +2,22 @@ require 'oystercard'
 
 describe Oystercard do
 let(:mockStation)   { double :station }
+let(:mockStation2)   { double :station }
 
   describe "#new" do
 
-    describe ".journey" do
+    # describe ".journey" do
+    #   it "returns an empty hash" do
+    #     expect(subject.journey).to eq({})
+    #   end
+    # end
+
+    describe ".journey_list" do
       it "returns an empty array" do
-        expect(subject.journey).to eq([])
+        expect(subject.journey_list).to eq([])
       end
     end
+
 
     describe ".balance" do
       it "has a balance of 10" do
@@ -75,13 +83,31 @@ let(:mockStation)   { double :station }
       expect(subject.in_journey?).to eq false
     end
 
+    # it "assigns exit station" do
+    #   subject.touch_in(mockStation)
+    #   subject.touch_out(mockStation)
+    #   expect(subject.exit_station).to eq(mockStation)
+    #   # add a way to check journey for exit station
+    #
+    # end
+
     it "takes 1 argument" do
       expect(subject).to respond_to(:touch_out).with(1).argument
     end
+
+
     describe ".entry_station" do
       it "return nil" do
         subject.touch_out(mockStation)
         expect(subject.entry_station).to eq nil
+      end
+    end
+
+    describe ".journey_list" do
+      it "stores journey" do
+        subject.touch_in(mockStation)
+        subject.touch_out(mockStation2)
+        expect(subject.journey_list).to eq([{entry_station: mockStation, exit_station: mockStation2}])
       end
     end
 
