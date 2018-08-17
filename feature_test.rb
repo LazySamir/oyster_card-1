@@ -3,20 +3,15 @@ require './lib/station.rb'
 require './lib/journey.rb'
 
 card = Oystercard.new
-card.touch_in("radio4")
-card.touch_out("Bank")
-card.touch_in("radio5")
-card.touch_out("Banks")
-
-card.journey_list
-
-
 station = Station.new(name: 'hello', zone: 1)
-station.zone
-station.name
-
+station2 = Station.new(name: 'goodbye', zone: 2)
 journey = Journey.new("voyage")
-journey.start(station)
-journey.finish(station)
-journey.complete?
-journey.fare
+
+card.touch_in(station, journey)
+
+journey.voyage
+
+card.touch_out(station2, journey)
+card.balance
+
+journey_log = JouneyLog.new(journey_class)

@@ -1,32 +1,16 @@
 require 'oystercard'
 
 describe Oystercard do
-let(:mockStation)   { double :station }
-let(:mockStation2)   { double :station }
+let(:mockStation)     { double :station }
+let(:mockStation2)    { double :station }
 
-  describe "#new" do
+  it "knows its balance" do
+    expect(subject.balance).to eq(Oystercard::DEFAULT_BALANCE)
+    expect(described_class.new(5).balance).to eq(5)
+  end
 
-    # describe ".journey" do
-    #   it "returns an empty hash" do
-    #     expect(subject.journey).to eq({})
-    #   end
-    # end
-
-    describe ".journey_list" do
-      it "returns an empty array" do
-        expect(subject.journey_list).to eq([])
-      end
-    end
-
-
-    describe ".balance" do
-      it "has a balance of 10" do
-        expect(subject.balance).to eq(Oystercard::DEFAULT_BALANCE)
-      end
-      it "has a changeable default" do
-        expect(Oystercard.new(5).balance).to eq(5)
-      end
-    end
+  it "knows its limit" do
+      expect(subject.limit).to eq(90)
   end
 
   describe "#add_money" do
@@ -38,50 +22,56 @@ let(:mockStation2)   { double :station }
     end
   end
 
-  describe "#deduct_money" do
-    it "touch_out reduces balance by minimum fare via #deduct_money" do
-      subject.touch_out(mockStation)
-      expect(subject.balance).to eq (Oystercard::DEFAULT_BALANCE - Oystercard::MINIMUM_FARE)
+# TEST DEDUCT MONEY INDIRECTLY
+  # describe "#deduct_money" do
+  #   it "will not deduct money if not enough on balance" do
+  #     expect { subject.deduct_money(subject.limit+1) }.to raise_error("Insufficient balance, #{subject.balance} remaining")
+  #   end
+  # end
+
+# moreJourney to pass to touch_out
+      #
+      # subject.touch_out(mockStation, mockJourney)
+      # expect(subject.balance).to eq (Oystercard::DEFAULT_BALANCE - Oystercard::MINIMUM_FARE)
+
       # should this be in deduct_money or touch_out?
       # wants us to use this syntax
       # expect { subject.balance }.to change{}.by()
-    end
-  end
 
-  describe "#in_journey?" do
-    it "returns false by default" do
-      expect(subject.in_journey?).to eq false
-    end
-  end
+  # describe "#in_journey?" do
+  #   it "returns false by default" do
+  #     expect(subject.in_journey?).to eq false
+  #   end
+  # end
 
   describe "#touch_in" do
-    it "assigns in_journey to true" do
-      subject.touch_in(mockStation)
-      expect(subject.in_journey?).to eq true
-    end
+  #   it "assigns in_journey to true" do
+  #     subject.touch_in(mockStation)
+  #     expect(subject.in_journey?).to eq true
+  #   end
 
-    describe ".entry_station" do
-      it "return last station name" do
-        subject.touch_in(mockStation)
-        expect(subject.entry_station).to eq mockStation
-      end
-    end
-
+    # describe ".entry_station" do
+    #   it "return last station name" do
+    #     subject.touch_in(mockStation)
+    #     expect(subject.entry_station).to eq mockStation
+    #   end
+    # end
     context "while balance = 0" do
-      let(:sub2)        { Oystercard.new(0) }
+      let(:card0)        { described_class.new(0) }
+      let(:mockJourney)  {double :journey}
       it "raises error if not enough funds" do
-        expect { sub2.touch_in(mockStation) }.to raise_error "balance below minimum: #{Oystercard::MINIMUM_FARE}"
+        expect { card0.touch_in(mockStation, mockJourney) }.to raise_error "balance below minimum: #{Oystercard::MINIMUM_FARE}"
       end
     end
   end
 
   describe "#touch_out" do
-    it "assigns in_journey to false" do
-      subject.touch_in(mockStation)
-      #is this too relient on touch_in working? set instance variable directly?
-      subject.touch_out(mockStation)
-      expect(subject.in_journey?).to eq false
-    end
+    # it "assigns in_journey to false" do
+    #   subject.touch_in(mockStation)
+    #   #is this too relient on touch_in working? set instance variable directly?
+    #   subject.touch_out(mockStation)
+    #   expect(subject.in_journey?).to eq false
+    # end
 
     # it "assigns exit station" do
     #   subject.touch_in(mockStation)
@@ -91,25 +81,23 @@ let(:mockStation2)   { double :station }
     #
     # end
 
-    it "takes 1 argument" do
-      expect(subject).to respond_to(:touch_out).with(1).argument
+    it "takes 2 arguments" do
+      expect(subject).to respond_to(:touch_out).with(2).arguments
     end
 
+    # describe ".entry_station" do
+    #   it "return nil" do
+    #     subject.touch_out(mockStation)
+    #     expect(subject.entry_station).to eq nil
+    #   end
+    # end
 
-    describe ".entry_station" do
-      it "return nil" do
-        subject.touch_out(mockStation)
-        expect(subject.entry_station).to eq nil
-      end
-    end
-
-    describe ".journey_list" do
-      it "stores journey" do
-        subject.touch_in(mockStation)
-        subject.touch_out(mockStation2)
-        expect(subject.journey_list).to eq([{entry_station: mockStation, exit_station: mockStation2}])
-      end
-    end
-
+    # describe ".journey_list" do
+    #   it "stores journey" do
+    #     subject.touch_in(mockStation)
+    #     subject.touch_out(mockStation2)
+    #     expect(subject.journey_list).to eq([{entry_station: mockStation, exit_station: mockStation2}])
+    #   end
+    # end
   end
 end
